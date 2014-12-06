@@ -1,0 +1,7 @@
+<table>
+	<tr valign="top">
+		<td><img src="{{ post.author.avatar(40) }}"></td>
+		<td><i>{{ post.author.nickname }} said {{ momentjs(post.timestamp).fromNow() }}:
+</i><br><strng>{{ post.body }} </strong></td>
+	</tr>
+</table>
