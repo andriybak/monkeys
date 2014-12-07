@@ -1,0 +1,25 @@
+<table class="table table-hover">
+	<tr>
+	  <td width="70px"><img src="{{ friend.avatar(60) }}"></td>
+	  <td><i><strong>
+	   <a href="{{ url_for('user',nickname=friend.nickname) }}"> {{ friend.nickname }}:  </a>
+	  </strong></i>
+	  <br>
+	   {{ friend.friends.count() }} 
+	   {% if friend.friends.count()!=1 %} Friends 
+	   {% else %} Friend {% endif %}
+	  <br>
+	   {% if friend.bff!=None %}
+		 Best Friend: <a href="{{ url_for('user', nickname=friend.bff) }}">{{ friend.bff }} </a>
+	   {% else %}
+		 No Best Friend.
+	   {% endif %}
+
+	  <br>
+	    {% if friend.last_seen == None %} <b>Never logged in!</b> 
+	    {% else %} {{ momentjs(friend.last_seen).calendar() }} 
+  	    {% endif %} 
+	  </td>
+	</tr>
+	<br>
+</table>

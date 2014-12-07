@@ -2,32 +2,38 @@
 
 {% block content %}
 <h1> Edit Your Profile </h1>
-<form action="" method="post" name="edit">
+<form class="form-horizontal" action="" method="post" name="edit">
 	{{ form.hidden_tag() }}
-<table>
-	<tr>
-		<td>Your nickname: </td>
-		<td>{{ form.nickname(size=20) }} </td>
+	<div class="control-group{% if form.nickname.errors %} error {% endif %}">
+	  <label class="control-label" for="nickname">{{ ("Your nickname:") }} </label>
+	  <div class="controls">
+		{{ form.nickname(size=20, class="span4") }}
 		{% for error in form.errors.nickname %}
-		<br><span style="color:red;">[{{ error }}]</span>
+			<span class="help-inline">[{{ error }}]</span><br>
 		{% endfor %}
-	</tr>
-	<tr>
-		<td>Change your age: </td>
-		<td>{{ form.age(size=5) }} </td>
+	  </div>
+	</div>
+	<div class="control-group{% if form.age.errors %} error {% endif %}">
+	  <label class="control-label" for="age">{{ ("Change your age:") }}</label><br>
+		{{ form.age(size=5) }}
 		{% for error in form.errors.age %}
-		<br><span style="color:red;">[{{ error }}]</span>
+			<span class="help-inline">[{{ error }}]</span><br>
 		{% endfor %}
-	</tr>
-	<tr>
-		<td>About yourself: </td>
-		<td>{{ form.about_me(cols=30, rows=4) }} </td>
-	</tr>
-	<tr>
-		<td></td>
-		<td><input type="submit" value="Update Profile"></td>
-	</tr>
-</table>
+	</div>
+	<div class="control-group{% if form.about_me.errors %} error {% endif %}">
+  	 <label class="control-label" for="about_me"> {{ ("About me") }}</label>
+	 <div class="controls">
+		{{ form.about_me(cols=30, rows=4, class="span4") }} 
+		{% for error in form.errors.about_me %}
+			<span class="help-inline">[{{ error }}]</span><br>
+		{% endfor %}
+	  </div>
+	</div>
+	<div class="control-group">
+		<div class="controls">
+		  <input type="submit" value="Update Profile" class="btn btn-primary">
+		</div>
+	</div>
 </form>
 
 {% endblock %}

@@ -100,7 +100,7 @@ def user(nickname, page=1):
 		return redirect(url_for("index"))
 	posts=user.posts.paginate(page,POSTS_PER_PAGE,False)
   	friends=g.user.friended_users().paginate(page,POSTS_PER_PAGE,False)
-	allusers=User.query.all()	
+	allusers=User.query.paginate(page,POSTS_PER_PAGE,False)	
 	return render_template("user.html", user=user, posts=posts,friends=friends, users=allusers)
 
 @app.route("/edit", methods=["GET", "POST"])
@@ -120,6 +120,9 @@ def edit():
 		form.age.data=g.user.age
 		form.about_me.data=g.user.about_me
 	return render_template("edit.html", form=form)
+@app.errorhandler(401)
+def not_found_error(error):
+	return render_template("401.html"), 401
 
 @app.errorhandler(404)
 def not_found_error(error):

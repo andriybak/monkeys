@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<h1>An error 401 UNAUTHORIZED ACCESS has ocurred</h1>
+	<p> <a href="{{ url_for('login') }}">Login</a></p>
+	<p> <a href="{{ url_for('register') }}">Register</a></p>
+{% endblock %}

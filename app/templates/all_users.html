@@ -6,36 +6,22 @@
 
 
 
-{% for u in users.items %}
-	<table>
-	<tr valign="top">
-			<td><img src="{{ u.avatar(60) }}"></td>
-			<td><i><strong>
-	   <a href="{{ url_for('user',nickname=u.nickname) }}"> {{ u.nickname }}:  </a>
-	   </strong></i><br>
-	{{ u.friends.count() }} {% if u.friends.count()!=1 %} Friends {% else %} Friend {% endif %}
-	<br>
-
-		{% if u.bff!=None %}
-		 Best Friend: <a href="{{ url_for('user', nickname=u.bff) }}">{{ u.bff }} </a>
-		{% else %}
-		 No Best Friend.
-		{% endif %}
-
-	<br>{% if u.last_seen == None %} <b>Never logged in!</b> 
-	    {% else %} {{ momentjs(u.last_seen).calendar() }} 
-  	    {% endif %} </td>
-	</tr>
-	<br>
-	</table>
-
+{% for friend in users.items %}
+	{% include "friend_list.html" %}
 {% endfor %}
-<br>
- {% if users.has_prev %}<a href="{{ url_for('all_users', page=users.prev_num) }}"> << Back  </a>...
-    {% else %} << Back ... {% endif %}
-    {% if users.has_next %}<a href="{{ url_for('all_users', page=users.next_num) }}">  More >> </a>
-    {% else %} More >> {% endif %}
 
+<ul class="pager">
+    {% if users.has_prev %}
+	<li class="previous"><a href="{{ url_for('index', page=users.prev_num) }}"> << Back ... </a>
+    {% else %}
+	<li class="previous disabled"><a href="#"> << Back ...</a></li> 
+    {% endif %}
+    {% if users.has_next %}
+	<li class="next"><a href="{{ url_for('index', page=users.next_num) }}">  More >> </a></li>
+    {% else %} 
+	<li class="next disabled"><a href="#"> More >> </a></li>
+    {% endif %}
+</ul>
 
 
 {% endblock %}
