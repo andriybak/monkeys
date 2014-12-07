@@ -36,6 +36,7 @@ class User(db.Model):
 	if self.bff == user.nickname:
 		self.bff=None
 		return self
+	return None
 
     def friended(self, user):
 	if not self.is_friend(user):

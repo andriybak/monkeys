@@ -12,12 +12,12 @@
 
 <ul class="pager">
     {% if users.has_prev %}
-	<li class="previous"><a href="{{ url_for('index', page=users.prev_num) }}"> << Back ... </a>
+	<li class="previous"><a href="{{ url_for('all_users', page=users.prev_num) }}"> << Back ... </a>
     {% else %}
 	<li class="previous disabled"><a href="#"> << Back ...</a></li> 
     {% endif %}
     {% if users.has_next %}
-	<li class="next"><a href="{{ url_for('index', page=users.next_num) }}">  More >> </a></li>
+	<li class="next"><a href="{{ url_for('all_users', page=users.next_num) }}">  More >> </a></li>
     {% else %} 
 	<li class="next disabled"><a href="#"> More >> </a></li>
     {% endif %}

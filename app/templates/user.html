@@ -2,7 +2,7 @@
 
 {% block content %}
 {% include "flash.html" %}
-<div class="well well-large" style="height: 250px;">
+<div class="well well-large" style="height: 270px;">
 	<div class="pull-right">
 		<img src="{{ user.avatar(190) }}" class="img-polaroid">
 	</div>
@@ -43,12 +43,12 @@
   {% endfor %}
 <ul class="pager">
     {% if friends.has_prev %}
-	<li class="previous"><a href="{{ url_for('index', page=friends.prev_num) }}"> << Back ... </a>
+	<li class="previous"><a href="{{ url_for('user',nickname=user.nickname, page=friends.prev_num) }}"> << Back ... </a>
     {% else %}
 	<li class="previous disabled"><a href="#"> << Back ...</a></li> 
     {% endif %}
-    {% if posts.has_next %}
-	<li class="next"><a href="{{ url_for('index', page=friends.next_num) }}">  More >> </a></li>
+    {% if friends.has_next %}
+	<li class="next"><a href="{{ url_for('user',nickname=user.nickname, page=friends.next_num) }}">  More >> </a></li>
     {% else %} 
 	<li class="next disabled"><a href="#"> More >> </a></li>
     {% endif %}
@@ -63,12 +63,12 @@
     		{% endfor %}
 <ul class="pager">
     {% if user.posts.has_prev %}
-	<li class="previous"><a href="{{ url_for('index', page=user.posts.prev_num) }}"> << Back ... </a>
+	<li class="previous"><a href="{{ url_for('user',nickname=user.nickname, page=user.posts.prev_num) }}"> << Back ... </a>
     {% else %}
 	<li class="previous disabled"><a href="#"> << Back ...</a></li> 
     {% endif %}
-    {% if posts.has_next %}
-	<li class="next"><a href="{{ url_for('index', page=user.posts.next_num) }}">  More >> </a></li>
+    {% if user.posts.has_next %}
+	<li class="next"><a href="{{ url_for('user',nickname=user.nickname, page=user.posts.next_num) }}">  More >> </a></li>
     {% else %} 
 	<li class="next disabled"><a href="#"> More >> </a></li>
     {% endif %}

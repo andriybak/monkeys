@@ -4,7 +4,7 @@ from wtforms.validators import DataRequired, Length, Required, Email
 from app.models import User
 
 class LoginForm(Form):
-    nickname = StringField('nickname',[DataRequired()])
+    email = StringField('nickname',[DataRequired(), Email()])
     password = PasswordField('password', [DataRequired()])
     remember_me = BooleanField('remember_me', default=False)
 
@@ -15,9 +15,9 @@ class LoginForm(Form):
 	rv= Form.validate(self)
 	if not rv:
 		return False
-	user= User.query.filter_by(nickname=self.nickname.data).first()
+	user= User.query.filter_by(email=self.email.data).first()
 	if user is None:
-		self.nickname.errors.append("Unknows nickname")
+		self.email.errors.append("Unknows nickname")
 		return False
 	if not user.check_password(self.password.data):
 		self.password.errors.append("Invalid password")

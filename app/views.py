@@ -21,8 +21,6 @@ def before_request():
 	db.session.add(g.user)
 	db.session.commit()
 
-
-@app.route('/', methods=["GET", "POST"])
 @app.route('/index', methods=["GET", "POST"])
 @app.route('/index/<int:page>', methods=["GET", "POST"])
 @login_required
@@ -39,42 +37,35 @@ def index(page=1):
   
     return render_template("index.html", form=form, posts=posts, user=g.user)
 
-
+@app.route('/', methods=["GET", "POST"])
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if g.user is not None and g.user.is_authenticated():
         return redirect(url_for('index'))
     form = LoginForm()
     if form.validate():
-	user = User.query.filter_by(nickname=form.nickname.data).first()
+	user = User.query.filter_by(email=form.email.data).first()
 	login_user(user, remember= form.remember_me.data)
         if 'remember_me' in session:
            remember_me = session['remember_me']
            session.pop('remember_me', None)
         session["email"]=user.email
-	flash(u"Successfully logged in as %s" % form.nickname.data)
+	flash(u"Successfully logged in as %s" % user.nickname)
         session['remember_me'] = form.remember_me.data
         return redirect(url_for('index'))
     return render_template('login.html', form=form)
-
-
-
 
 @app.route('/register', methods=['GET', 'POST'])
 def register(): 
     form = RegisterForm()
     if form.validate_on_submit():	
-	newuser= User(nickname=form.nickname.data, password=form.password.data, email=form.email.data, age=form.age.data)
-	
+	newuser= User(nickname=form.nickname.data, password=form.password.data, email=form.email.data, age=form.age.data)	
 	db.session.add(newuser)
 	db.session.commit()
 	login_user(newuser)
 	session["email"]=newuser.email
         return redirect(url_for("index"))
     return render_template('register.html',form=form)
-
-
-
 
 @app.route('/logout')
 def logout():
@@ -100,26 +91,32 @@ def user(nickname, page=1):
 		return redirect(url_for("index"))
 	posts=user.posts.paginate(page,POSTS_PER_PAGE,False)
   	friends=g.user.friended_users().paginate(page,POSTS_PER_PAGE,False)
-	allusers=User.query.paginate(page,POSTS_PER_PAGE,False)	
-	return render_template("user.html", user=user, posts=posts,friends=friends, users=allusers)
+	
+	return render_template("user.html", user=user, posts=posts,friends=friends)
 
 @app.route("/edit", methods=["GET", "POST"])
 @login_required
 def edit():
 	form = EditForm(g.user.nickname)
 	if form.validate_on_submit():
+		users=User.query.all()
+		for u in users:
+			if u.bff==g.user.nickname:
+				u.bff=form.nickname.data
 		g.user.nickname=form.nickname.data
 		g.user.about_me=form.about_me.data		
 		g.user.age=form.age.data
+		
 		db.session.add(g.user)
 		db.session.commit()
 		flash("Your changes were saved!")
-		return redirect(url_for("edit"))
+		return redirect(url_for("user", nickname=g.user.nickname))
 	else:
 		form.nickname.data=g.user.nickname
 		form.age.data=g.user.age
 		form.about_me.data=g.user.about_me
 	return render_template("edit.html", form=form)
+
 @app.errorhandler(401)
 def not_found_error(error):
 	return render_template("401.html"), 401
@@ -164,13 +161,16 @@ def unfriend(nickname):
 	if user == g.user:
 		flash("Impossible to delete yourself!")
 		return redirect(url_for("user", nickname=nickname))
-	u1=g.user.unfriend(user)
+	u1=g.user.unfriend(user)	
+	bff=g.user.remove_bff(user)
 	u2=user.unfriend(g.user)
 	if u1 is None or u2 is None:
 		flash("Cannot delete friend: "+nickname+"!")
 		return redirect(url_for("user",nickname=nickname))
 	db.session.add(u1)
 	db.session.add(u2)
+	if g.user.bff is not None:
+	   db.session.add(bff)
 	db.session.commit()
 	flash("You deleted user: "+nickname+" from your friends.")
 	return redirect(url_for("user",nickname=nickname))
@@ -212,7 +212,6 @@ def unbff(nickname):
 	db.session.commit()
 	flash("You deleted best fiend: "+nickname+".")
 	return redirect(url_for("user",nickname=nickname))
-
 
 
 @app.route("/all_users")
