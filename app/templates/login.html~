@@ -2,26 +2,13 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <script type="text/javascript">
-    function set_openid(openid, pr)
-    {
-        u = openid.search('<username>');
-        if (u != -1) {
-            // openid requires username
-            user = prompt('Enter your ' + pr + ' username:');
-            openid = openid.substr(0, u) + user;
-        }
-        form = document.forms['login'];
-        form.elements['openid'].value = openid;
-    }
-    </script>
     <h1>Sign In</h1>
     <form action="" method="post" name="login">
         {{ form.hidden_tag() }}
         <p>
-            Please enter your Nickname:<br>
-            {{ form.nickname(size=40) }}
-            {% for error in form.nickname.errors %}
+            Please enter your Email:<br>
+            {{ form.email(size=40) }}
+            {% for error in form.email.errors %}
                 <span style="color: red;">[{{ error }}]</span>
             {% endfor %}<br>
 	    Please enter your Password:<br>
@@ -31,6 +18,8 @@
             {% endfor %}<br>
         </p>
         <p>{{ form.remember_me }} Remember Me</p>
-        <p><input type="submit" value="Sign In"></p>
+	<div class="control-group controls">
+           <p><input class="btn btn-primary" type="submit" value="Sign In"></p>
+	</div>
     </form>
 {% endblock %}

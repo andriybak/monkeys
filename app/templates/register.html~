@@ -7,9 +7,9 @@
     <form action="" method="post" name="login">
         {{ form.hidden_tag() }}
         <p>
-            Please enter your Username:<br>
-            {{ form.username(size=40) }}
-            {% for error in form.username.errors %}
+            Please enter your nickname:<br>
+            {{ form.nickname(size=40) }}
+            {% for error in form.nickname.errors %}
                 <span style="color: red;">[{{ error }}]</span>
             {% endfor %}<br>
 	    Please enter your Password:<br>
@@ -28,7 +28,8 @@
                 <span style="color: red;">[{{ error }}]</span>
             {% endfor %}<br>
         </p>
-       
-        <p><input type="submit" value="Register Me!"></p>
+       <div class="control-group controls">
+        <p><input class="btn btn-primary" type="submit" value="Register Me!"></p>
+       </div>
     </form>
 {% endblock %}
