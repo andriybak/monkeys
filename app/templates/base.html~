@@ -9,7 +9,7 @@
     <link href="/static/css/bootstrap-responsive.css" rel="stylesheet">
     <script src="http://code.jquery.com/jquery-latest.js"></script>
     <script src="/static/js/bootstrap.min.js"></script>
-    <script src="/static/moment.js"></script>
+    <script src="/static/js/moment.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
   </head>
   <body>
@@ -24,6 +24,7 @@
 	| <a href="{{ url_for('user', nickname=g.user.nickname) }}">Your profile</a>
 	| <a href="{{ url_for('all_users') }}">Find monkeys</a>
         | <a href="{{ url_for('logout') }}">Logout</a>
+	| <a href="{{ url_for('delete') }}">Delete</a>
         {% endif %}
     </div>
     <hr>

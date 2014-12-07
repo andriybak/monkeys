@@ -29,7 +29,7 @@ class User(db.Model):
 		return False
 	return True
     def add_bff(self, user):
-	if self.bff is None and self.is_following(user):
+	if self.bff is None and self.is_friend(user):
 		self.bff=user.nickname
 		return self
     def remove_bff(self, user):
@@ -38,14 +38,14 @@ class User(db.Model):
 		return self
 
     def friended(self, user):
-	if not self.is_following(user):
+	if not self.is_friend(user):
 		self.friend.append(user)
 		return self
     def unfriend(self, user):
-	if self.is_following(user):
+	if self.is_friend(user):
 		self.friend.remove(user)
 		return self
-    def is_following(self,user):
+    def is_friend(self,user):
 	return self.friend.filter(friends.c.friended_id == user.id).count() > 0
   
 

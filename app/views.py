@@ -99,9 +99,9 @@ def user(nickname, page=1):
 		flash("User %s not found." % nickname)
 		return redirect(url_for("index"))
 	posts=user.posts.paginate(page,POSTS_PER_PAGE,False)
-  	friend=g.user.friended_users().paginate(page,POSTS_PER_PAGE,False)
+  	friends=g.user.friended_users().paginate(page,POSTS_PER_PAGE,False)
 	allusers=User.query.all()	
-	return render_template("user.html", user=user, posts=posts,follow=friend, users=allusers)
+	return render_template("user.html", user=user, posts=posts,friends=friends, users=allusers)
 
 @app.route("/edit", methods=["GET", "POST"])
 @login_required

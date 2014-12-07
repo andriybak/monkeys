@@ -101,7 +101,7 @@ def user(nickname, page=1):
 	posts=user.posts.paginate(page,POSTS_PER_PAGE,False)
   	friend=g.user.friended_users().paginate(page,POSTS_PER_PAGE,False)
 	allusers=User.query.all()	
-	return render_template("user.html", user=user, posts=posts,follow=friend, users=allusers)
+	return render_template("user.html", user=user, posts=posts,friends=friend, users=allusers)
 
 @app.route("/edit", methods=["GET", "POST"])
 @login_required
@@ -216,7 +216,7 @@ def unbff(nickname):
 @app.route("/all_users/<int:page>")
 @login_required
 def all_users(page=1):	
-	allusers=g.user.get_all_by_name().paginate(page,POSTS_PER_PAGE,False)
+	allusers=User.query.paginate(page,POSTS_PER_PAGE,False)
 
 	return render_template("all_users.html", user=g.user, users=allusers)
 

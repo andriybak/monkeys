@@ -4,55 +4,68 @@
 <table>
 	<tr valign="top" >
 		<td><img src="{{ user.avatar(120) }}"></td>
-		<td><h1> User: {{ user.nickname }}! </h1>
-<p>{{ user.friends.count() }} Friends |
-{% if user.id==g.user.id %}<a href="{{ url_for('edit') }}">Edit</a>
-{% elif not g.user.is_following(user) %}
-	<a href="{{ url_for('friend', nickname=user.nickname) }}">Add Friend</a>
-{% elif g.user.is_following(user) %}
-	<a href="{{ url_for('unfriend', nickname=user.nickname) }}">Remove Friend</a>
-	{% if g.user.bff != user.nickname %}
-	|<a href="{{ url_for('bff', nickname=user.nickname) }}">Add Best Friend</a>
-	{% else %}
-|	<a href="{{ url_for('unbff', nickname=user.nickname) }}">Delete Best Friend</a>
-	{% endif %}
- {% endif %}
-		{% if user.about_me %}<p>{{ user.about_me }} </p> {% endif %}
-		{% if user.last_seen %}<p><em>Last seen: {{ momentjs(user.last_seen).calendar() }}</em> </p> {% endif %}
-		<p> {{ user.age }} years old. </p>
-		<p> Email: {{ user.email }} </p>
+		<td><h1> Your monkey: {{ user.nickname }}! </h1>
+		<p><b>{{ user.friends.count() }}</b> Friends |
+	{% if user.id==g.user.id %}<a href="{{ url_for('edit') }}">Edit</a>
+	{% elif not g.user.is_friend(user) %}
+	    <a href="{{ url_for('friend', nickname=user.nickname) }}">Add Friend</a>
+	{% elif g.user.is_friend(user) %}
+	    <a href="{{ url_for('unfriend', nickname=user.nickname) }}">Remove Friend</a>
+	  {% if g.user.bff != user.nickname %}
+	   |<a href="{{ url_for('bff', nickname=user.nickname) }}">Add Best Friend</a>
+	  {% else %}
+	   |<a href="{{ url_for('unbff', nickname=user.nickname) }}">Delete Best Friend</a>
+	  {% endif %}
+        {% endif %}
+	{% if user.about_me %}
+		<p>About me: <b>{{ user.about_me }}</b> </p> {% endif %}
+	{% if user.last_seen %}
+                <p><em>Last seen:<b> {{ momentjs(user.last_seen).calendar() }}</b></em> </p> {% endif %}
+		<p> <b>{{ user.age }}</b> years old. </p>
+		<p> Email:<b> {{ user.email }}</b> </p>
+		<p> Best Friend:
+		{% if user.bff!=None %}
+		 <a href="{{ url_for('user', nickname=user.bff) }}"><b>{{ user.bff }}</b> </a>
+		{% else %}
+		 <b>No Best Friend.</b>
+		{% endif %}
+		</p>
 		
 		</td>
 	</tr>
 </table>
 <hr>
-<p> Best Friend:
-{% if user.bff!=None %}
- <a href="{{ url_for('user', nickname=user.bff) }}">{{ user.bff }} </a>
-{% else %}
- No Best Friend.
-{% endif %}
-</p>
+
 
 {% if g.user.nickname == user.nickname %}
-<br>Your friend list: <br>
-{% for fol in follow.items %}
-<table>
+  <br>Your friend list: <br>
+  {% for friend in friends.items %}
+  <table>
 	<tr valign="top">
-	  <td><img src="{{ fol.avatar(50) }}"></td>
+	  <td><img src="{{ friend.avatar(50) }}"></td>
 	  <td>
   	    <i><strong>
-	       <a href="{{ url_for('user',nickname=fol.nickname) }}"> {{ fol.nickname }}:</a>
-            </strong></i><br>
-		<i> {{ fol.friends.count() }} Friends  </i><br>
-		<i> {% if fol.last_seen %}Last seen: {{ momentjs(fol.last_seen).calendar() }} {% else %} Never came online. {% endif %}  </i>
+	       <a href="{{ url_for('user',nickname=friend.nickname) }}"> {{ friend.nickname }}:</a>
+            </strong></i>
+	    <br>
+	    <i> {{ friend.friends.count() }} Friends  </i>
+            <br>
+	    <i> {% if friend.last_seen %}Last seen: {{ momentjs(friend.last_seen).calendar() }} {% else %} Never came online. {% endif %}  </i>
           </td>
 	</tr>
-<br>
-</table>
+     <br>
+  </table>
 {% endfor %}
+
+{% else %}
+	{% if user.posts.count()==0 %}
+		<p> No posts here yet... </p>
+	{% else %}
+		{% for post in user.posts %}		  
+   			{% include "post.html" %}
+    		{% endfor %}
+	{% endif %}
+	
 {% endif %}
 
 {% endblock %}
-
-
