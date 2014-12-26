@@ -1,7 +1,10 @@
 {% extends "base.html" %}
 
 {% block content %}
-
+Sort: 
+ <a href="{{ url_for('all_users', order=1) }}">by Name</a>
+ |
+ <a href="{{ url_for('all_users', order=2) }}">by Best Friend Name</a>
 <hr>
 
 

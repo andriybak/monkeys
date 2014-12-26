@@ -7,34 +7,33 @@
 		<img src="{{ user.avatar(190) }}" class="img-polaroid">
 	</div>
 	<h1> Monkey {{ user.nickname }} </h1>
-	<b>{{ user.friends.count() }}</b> Friends |
+	<b>{{ user.friend.count() }}</b> Friends |
 	{% if user.id==g.user.id %}<a href="{{ url_for('edit') }}">Edit</a>
 	{% elif not g.user.is_friend(user) %}
 	    <a href="{{ url_for('friend', nickname=user.nickname) }}">Add Friend</a>
 	{% elif g.user.is_friend(user) %}
 	    <a href="{{ url_for('unfriend', nickname=user.nickname) }}">Remove Friend</a>
-	  {% if g.user.bff != user.nickname %}
+	  {% if g.user.bff_id != user.id %}
 	   |<a href="{{ url_for('bff', nickname=user.nickname) }}">Add Best Friend</a>
 	  {% else %}
 	   |<a href="{{ url_for('unbff', nickname=user.nickname) }}">Delete Best Friend</a>
 	  {% endif %}
         {% endif %}
 	{% if user.about_me %}
-		<p>About me: <b>{{ user.about_me }}</b> </p> {% endif %}
+		<p>About me: <b> {{ user.about_me }} </b></p> {% endif %}
 	{% if user.last_seen %}
-                <p><em>Last seen:<b> {{ momentjs(user.last_seen).calendar() }}</b></em> </p> 
+                <p><em>Last seen:<b> {{ momentjs(user.last_seen).calendar() }} </b></em></p> 
 	{% endif %}
 		<p> <b>{{ user.age }}</b> years old. </p>
 		<p> Email:<b> {{ user.email }}</b> </p>
 		<p> Best Friend:
-	{% if user.bff!=None %}
-		 <a href="{{ url_for('user', nickname=user.bff) }}"><b>{{ user.bff }}</b> </a>
+	{% if user.bff_id > 0 %}
+		 <a href="{{ url_for('user', nickname=user.get_bff().nickname) }}"><b>{{ user.get_bff().nickname }}</b> </a>
 	{% else %}
 		 <b>No Best Friend.</b>
 	{% endif %}
 </div>
 <hr>
-
 
 {% if g.user.nickname == user.nickname %}
   <br>Your friend list: <br>
@@ -43,12 +42,12 @@
   {% endfor %}
 <ul class="pager">
     {% if friends.has_prev %}
-	<li class="previous"><a href="{{ url_for('user',nickname=user.nickname, page=friends.prev_num) }}"> << Back ... </a>
+	<li class="previous"><a href="{{ url_for('user', nickname=user.nickname,  page=friends.prev_num) }}"> << Back ... </a>
     {% else %}
 	<li class="previous disabled"><a href="#"> << Back ...</a></li> 
     {% endif %}
     {% if friends.has_next %}
-	<li class="next"><a href="{{ url_for('user',nickname=user.nickname, page=friends.next_num) }}">  More >> </a></li>
+	<li class="next"><a href="{{ url_for('user', nickname=user.nickname, page=friends.next_num) }}">  More >> </a></li>
     {% else %} 
 	<li class="next disabled"><a href="#"> More >> </a></li>
     {% endif %}
@@ -63,12 +62,12 @@
     		{% endfor %}
 <ul class="pager">
     {% if user.posts.has_prev %}
-	<li class="previous"><a href="{{ url_for('user',nickname=user.nickname, page=user.posts.prev_num) }}"> << Back ... </a>
+	<li class="previous"><a href="{{ url_for('user', nickname=user.nickname, page=user.posts.prev_num) }}"> << Back ... </a>
     {% else %}
 	<li class="previous disabled"><a href="#"> << Back ...</a></li> 
     {% endif %}
     {% if user.posts.has_next %}
-	<li class="next"><a href="{{ url_for('user',nickname=user.nickname, page=user.posts.next_num) }}">  More >> </a></li>
+	<li class="next"><a href="{{ url_for('user', nickname=user.nickname, page=user.posts.next_num) }}">  More >> </a></li>
     {% else %} 
 	<li class="next disabled"><a href="#"> More >> </a></li>
     {% endif %}
